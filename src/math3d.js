@@ -10,15 +10,21 @@ export function project3d(x, y, gridWidth, gridHeight, params) {
   const axisAngleRad = twistAxisAngle * Math.PI / 180;
   const axisX = Math.cos(axisAngleRad);
   const axisY = Math.sin(axisAngleRad);
-  const distAlongAxis = cx * axisX + cy * axisY;
-  const twistRotation = distAlongAxis * twistAmount * 0.01;
-  const twistRad = twistRotation;
-  const cosTwist = Math.cos(twistRad);
-  const sinTwist = Math.sin(twistRad);
-  const twistX = cx * cosTwist - cy * sinTwist;
-  const twistY = cx * sinTwist + cy * cosTwist;
-  cx = twistX;
-  cy = twistY;
+
+  const gridDiagonal = Math.sqrt(gridWidth * gridWidth + gridHeight * gridHeight);
+  const twistScale = Math.PI / (gridDiagonal * 50);
+
+  const parallelDist = cx * axisX + cy * axisY;
+  const perpDist = -cx * axisY + cy * axisX;
+
+  const theta = parallelDist * twistAmount * twistScale;
+  const cosTheta = Math.cos(theta);
+  const sinTheta = Math.sin(theta);
+
+  const newPerpInPlane = perpDist * cosTheta;
+  cx = parallelDist * axisX + newPerpInPlane * (-axisY);
+  cy = parallelDist * axisY + newPerpInPlane * axisX;
+  cz = perpDist * sinTheta;
 
   // Step 3: Rotate around X axis
   const rxRad = rotateX * Math.PI / 180;
@@ -52,6 +58,6 @@ export function project3d(x, y, gridWidth, gridHeight, params) {
     y: projY,
     scale: scaleFactor,
     depth: cz,
-    twistRotation: twistRotation * 180 / Math.PI,
+    twistRotation: theta * 180 / Math.PI,
   };
 }
