@@ -275,7 +275,7 @@ function Sidebar({ params, setParam, loadAllParams }) {
         <Slider label="Rotate Y" min={-90} max={90} step={1} value={rotateY} onChange={v => setParam('rotateY', v)} />
         <Slider label="Perspective" min={100} max={2000} step={10} value={perspective} onChange={v => setParam('perspective', v)} />
         <Slider label="Twist Amount" min={-50} max={50} step={0.5} value={twistAmount} onChange={v => setParam('twistAmount', v)} />
-        <Slider label="Twist Axis Angle" min={0} max={360} step={1} value={twistAxisAngle} onChange={v => setParam('twistAxisAngle', v)} />
+        <AngleControl angle={twistAxisAngle} onAngleChange={v => setParam('twistAxisAngle', v)} />
       </AccordionSection>
 
       {/* Export */}

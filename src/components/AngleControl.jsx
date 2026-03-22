@@ -22,7 +22,7 @@ function polarToCartesian(angleDeg, r, cx = CENTER, cy = CENTER) {
   };
 }
 
-function AngleControl({ angle, onAngleChange, isRadial, onRadialChange }) {
+function AngleControl({ angle, onAngleChange, isRadial = false, onRadialChange }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const svgRef = useRef(null);
@@ -335,7 +335,7 @@ function AngleControl({ angle, onAngleChange, isRadial, onRadialChange }) {
           </svg>
         </motion.div>
 
-        <button
+        {onRadialChange && <button
           className={`radial-toggle ${isRadial ? 'active' : ''}`}
           onClick={() => onRadialChange(!isRadial)}
           title="Radial mode"
@@ -368,7 +368,7 @@ function AngleControl({ angle, onAngleChange, isRadial, onRadialChange }) {
               strokeWidth="0.8"
             />
           </svg>
-        </button>
+        </button>}
       </div>
     </div>
   );
