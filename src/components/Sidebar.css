@@ -208,6 +208,10 @@
 .export-btn {
   flex: 1;
   padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   background: transparent;
   color: var(--accent);
   border: 1px solid var(--accent-dim);

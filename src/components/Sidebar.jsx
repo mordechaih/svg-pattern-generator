@@ -281,8 +281,19 @@ function Sidebar({ params, setParam, loadAllParams }) {
       {/* Export */}
       <AccordionSection title="Export">
         <div className="export-buttons">
-          <button className="export-btn" onClick={() => downloadSvg()}>Download SVG</button>
-          <button className="export-btn" onClick={() => copySvgToClipboard()}>Copy SVG</button>
+          <button className="export-btn" onClick={() => downloadSvg()}>
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M8 2v8M5 7l3 3 3-3M3 13h10" />
+            </svg>
+            Download
+          </button>
+          <button className="export-btn" onClick={() => copySvgToClipboard()}>
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="6" y="6" width="8" height="8" rx="1" />
+              <path d="M4 10H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1" />
+            </svg>
+            Copy
+          </button>
         </div>
         <PresetManager params={params} loadAllParams={loadAllParams} />
       </AccordionSection>
