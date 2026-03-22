@@ -1,0 +1,108 @@
+.range-pill {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+  user-select: none;
+}
+
+.range-pill:hover {
+  border-color: var(--text-muted);
+}
+
+.range-pill-start,
+.range-pill-end {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  padding: 0 11px;
+  height: 38px;
+  flex: 1;
+}
+
+.range-pill-end {
+  border-left: 1px solid var(--border);
+}
+
+.range-pill-end-wrap {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  max-width: 0;
+  opacity: 0;
+  transition: max-width 350ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 250ms ease;
+}
+
+.range-pill.range-active .range-pill-end-wrap {
+  max-width: 160px;
+  opacity: 1;
+}
+
+.range-pill-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.range-pill-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-primary);
+  cursor: ew-resize;
+  line-height: 1;
+  transition: color var(--transition-fast);
+}
+
+.range-pill-val:hover {
+  color: var(--accent);
+}
+
+.range-pill-end-inner {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.range-pill-arrow {
+  color: var(--accent);
+  font-size: 11px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 200ms 80ms;
+}
+
+.range-pill.range-active .range-pill-arrow {
+  opacity: 1;
+}
+
+.range-pill-toggle {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border: none;
+  border-left: 1px solid var(--border);
+  background: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color var(--transition-fast), background var(--transition-fast);
+  font-family: var(--font-mono);
+}
+
+.range-pill-toggle:hover {
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.range-pill.range-active .range-pill-toggle {
+  color: var(--accent);
+}

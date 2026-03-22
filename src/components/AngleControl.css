@@ -1,0 +1,116 @@
+.angle-control {
+  position: relative;
+  height: 28px; /* fixed height = collapsed size */
+  display: flex;
+  align-items: center;
+}
+
+.angle-control-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding-left: 34px; /* reserve space for absolute-positioned compass (28px + 6px gap) */
+}
+
+/* ── Compass wrapper ─────────────────────────────────── */
+
+.compass-wrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  border-radius: 50%;
+  background: rgba(25, 25, 30, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle, #1E1E25);
+  cursor: default;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.compass-wrapper:hover {
+  border-color: var(--border, #2A2A32);
+  background: var(--bg-elevated, #1F1F26);
+}
+
+/* ── SVG compass ─────────────────────────────────────── */
+
+.compass-svg {
+  display: block;
+  overflow: visible;
+  touch-action: none;
+  user-select: none;
+}
+
+.compass-wrapper:hover .compass-svg {
+  cursor: crosshair;
+}
+
+/* ── Direction arrow glow ────────────────────────────── */
+
+.direction-arrow {
+  filter: drop-shadow(0 0 4px rgba(212, 168, 83, 0.4));
+}
+
+/* ── Radial toggle button ────────────────────────────── */
+
+.radial-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--border-subtle, #1E1E25);
+  border-radius: var(--radius-sm, 3px);
+  background: transparent;
+  color: var(--text-muted, #56565F);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast, 120ms ease),
+    border-color var(--transition-fast, 120ms ease),
+    background var(--transition-fast, 120ms ease);
+  flex-shrink: 0;
+}
+
+.radial-toggle:hover {
+  color: var(--text-secondary, #8A8A96);
+  border-color: var(--border, #2A2A32);
+  background: var(--bg-elevated, #1F1F26);
+}
+
+.radial-toggle.active {
+  color: var(--accent, #D4A853);
+  border-color: var(--accent-dim, #B8923F);
+  background: var(--accent-glow, rgba(212, 168, 83, 0.08));
+}
+
+.radial-toggle.active:hover {
+  color: var(--accent-hover, #E0B968);
+  background: var(--accent-glow-strong, rgba(212, 168, 83, 0.15));
+}
+
+.radial-toggle svg {
+  display: block;
+}
+
+/* ── Radial rings subtle pulse ───────────────────────── */
+
+.radial-rings circle {
+  transition: opacity 0.3s ease;
+}
+
+/* ── Compass overlay ─────────────────────────────────── */
+
+.compass-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 15;
+}

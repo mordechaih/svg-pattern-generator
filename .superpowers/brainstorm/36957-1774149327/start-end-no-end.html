@@ -1,0 +1,282 @@
+<style>
+  .grid { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+  .col { display: flex; flex-direction: column; gap: 12px; }
+  .col-label {
+    font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: #56565f; text-align: center; padding-bottom: 4px;
+    border-bottom: 1px solid #2a2a32; margin-bottom: 4px;
+  }
+  .sidebar-mock {
+    background: #1a1a1f; border: 1px solid #2a2a32; border-radius: 10px;
+    padding: 14px 16px; width: 230px;
+    font-family: 'JetBrains Mono', 'Fira Mono', monospace; flex-shrink: 0;
+  }
+  .mock-label {
+    font-size: 9px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 1.5px; color: #56565f; margin-bottom: 8px;
+  }
+  .section-rule { height: 1px; background: #2a2a32; margin: 10px 0; }
+  .option-tag {
+    display: inline-block; font-size: 8px; letter-spacing: 1px;
+    text-transform: uppercase; background: rgba(212,168,83,0.12);
+    color: #D4A853; border-radius: 3px; padding: 2px 6px; margin-bottom: 10px;
+  }
+
+  /* ─── A: Dual-thumb ─── */
+  .range-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .range-val { font-size: 11px; color: #888; width: 28px; text-align: right; flex-shrink: 0; }
+  .range-val.end { text-align: left; }
+  .range-track { flex: 1; height: 3px; background: #2a2a32; border-radius: 2px; position: relative; }
+  .range-fill { position: absolute; height: 100%; background: #D4A853; border-radius: 2px; }
+  .range-thumb {
+    position: absolute; width: 12px; height: 12px; background: #D4A853;
+    border-radius: 50%; top: 50%; transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 2px #1a1a1f, 0 0 0 3px #D4A853;
+  }
+  .range-thumb.merged { background: #888; box-shadow: 0 0 0 2px #1a1a1f, 0 0 0 3px #888; }
+
+  /* ─── B: From/To pill ─── */
+  .from-to-row {
+    display: flex; align-items: center; gap: 0;
+    background: #222228; border: 1px solid #2a2a32; border-radius: 5px;
+    overflow: hidden; margin-bottom: 6px;
+  }
+  .from-to-segment { flex: 1; padding: 7px 10px; display: flex; flex-direction: column; gap: 2px; }
+  .from-to-segment + .from-to-segment { border-left: 1px solid #2a2a32; }
+  .from-to-tag { font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: #45454e; }
+  .from-to-val { font-size: 12px; color: #ccc; }
+  .from-to-val.muted { color: #45454e; }
+  .from-to-divider { padding: 0 6px; color: #D4A853; font-size: 14px; display: flex; align-items: center; }
+  .from-to-divider.muted { color: #2a2a32; }
+  .ft-slider { width: 100%; height: 2px; background: #2a2a32; border-radius: 2px; position: relative; margin-bottom: 8px; }
+  .ft-dot {
+    position: absolute; width: 8px; height: 8px; background: #D4A853;
+    border-radius: 50%; top: 50%; transform: translateY(-50%);
+    box-shadow: 0 0 0 2px #1a1a1f;
+  }
+  .ft-dot.muted { background: #45454e; }
+
+  /* ─── B2: collapsed single ─── */
+  .single-row {
+    display: flex; align-items: center; gap: 0;
+    background: #222228; border: 1px solid #2a2a32; border-radius: 5px;
+    overflow: hidden; margin-bottom: 6px;
+  }
+  .single-segment { flex: 1; padding: 7px 10px; display: flex; align-items: center; justify-content: space-between; }
+  .single-val { font-size: 12px; color: #ccc; }
+  .expand-btn {
+    background: none; border: none; border-left: 1px solid #2a2a32;
+    padding: 7px 10px; color: #45454e; font-size: 14px; cursor: pointer;
+    display: flex; align-items: center; font-family: inherit;
+  }
+  .expand-btn:hover { color: #D4A853; }
+
+  /* ─── C: Bookend ─── */
+  .pill-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .pill-input {
+    background: #222228; border: 1px solid #2a2a32; border-radius: 4px;
+    padding: 5px 8px; font-size: 11px; color: #ccc; font-family: inherit;
+    width: 44px; text-align: center; flex-shrink: 0;
+  }
+  .pill-input.muted { color: #45454e; border-color: #222228; }
+  .pill-track-wrap { flex: 1; }
+  .pill-track { height: 3px; background: #2a2a32; border-radius: 2px; position: relative; }
+  .pill-fill { position: absolute; height: 100%; background: #D4A853; border-radius: 2px; }
+  .pill-single { position: absolute; width: 10px; height: 10px; background: #D4A853; border-radius: 50%; top: 50%; transform: translate(-50%,-50%); box-shadow: 0 0 0 2px #1a1a1f; }
+
+  /* state badge */
+  .badge {
+    display: inline-block; font-size: 8px; padding: 2px 6px; border-radius: 3px;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .badge.off { background: rgba(255,255,255,0.04); color: #45454e; }
+  .badge.on  { background: rgba(212,168,83,0.1); color: #D4A853; }
+</style>
+
+<h2>Start → End: with and without a range</h2>
+<p class="subtitle">Left = uniform value (start = end) &nbsp;·&nbsp; Right = gradient range active</p>
+
+<div class="grid">
+
+  <!-- ── Option A ── -->
+  <div>
+    <div class="col-label">A · Dual-thumb slider</div>
+    <div class="col">
+
+      <div class="sidebar-mock">
+        <span class="badge off">Uniform</span>
+        <div class="mock-label">Spacing</div>
+        <div class="range-row">
+          <span class="range-val">40</span>
+          <div class="range-track">
+            <div class="range-fill" style="left:30%;width:0%"></div>
+            <div class="range-thumb merged" style="left:30%"></div>
+            <!-- second thumb hidden behind first -->
+          </div>
+          <span class="range-val end" style="color:#2a2a32">—</span>
+        </div>
+        <div class="section-rule"></div>
+        <div class="mock-label">Scale</div>
+        <div class="range-row">
+          <span class="range-val">1.0</span>
+          <div class="range-track">
+            <div class="range-fill" style="left:30%;width:0%"></div>
+            <div class="range-thumb merged" style="left:30%"></div>
+          </div>
+          <span class="range-val end" style="color:#2a2a32">—</span>
+        </div>
+      </div>
+
+      <div class="sidebar-mock">
+        <span class="badge on">Range active</span>
+        <div class="mock-label">Spacing</div>
+        <div class="range-row">
+          <span class="range-val">40</span>
+          <div class="range-track">
+            <div class="range-fill" style="left:16%;width:38%"></div>
+            <div class="range-thumb" style="left:16%"></div>
+            <div class="range-thumb" style="left:54%"></div>
+          </div>
+          <span class="range-val end">100</span>
+        </div>
+        <div class="section-rule"></div>
+        <div class="mock-label">Scale</div>
+        <div class="range-row">
+          <span class="range-val">0.5</span>
+          <div class="range-track">
+            <div class="range-fill" style="left:10%;width:45%"></div>
+            <div class="range-thumb" style="left:10%"></div>
+            <div class="range-thumb" style="left:55%"></div>
+          </div>
+          <span class="range-val end">2.0</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Option B ── -->
+  <div>
+    <div class="col-label">B · From / To pill + expand button</div>
+    <div class="col">
+
+      <div class="sidebar-mock">
+        <span class="badge off">Uniform</span>
+        <div class="mock-label">Spacing</div>
+        <div class="single-row">
+          <div class="single-segment">
+            <span class="from-to-tag">Value</span>
+            <span class="single-val">40</span>
+          </div>
+          <button class="expand-btn" title="Enable range">↔</button>
+        </div>
+        <div class="section-rule"></div>
+        <div class="mock-label">Scale</div>
+        <div class="single-row">
+          <div class="single-segment">
+            <span class="from-to-tag">Value</span>
+            <span class="single-val">1.0</span>
+          </div>
+          <button class="expand-btn" title="Enable range">↔</button>
+        </div>
+      </div>
+
+      <div class="sidebar-mock">
+        <span class="badge on">Range active</span>
+        <div class="mock-label">Spacing</div>
+        <div class="from-to-row">
+          <div class="from-to-segment">
+            <span class="from-to-tag">Start</span>
+            <span class="from-to-val">40</span>
+          </div>
+          <div class="from-to-divider">→</div>
+          <div class="from-to-segment">
+            <span class="from-to-tag">End</span>
+            <span class="from-to-val">100</span>
+          </div>
+        </div>
+        <div class="ft-slider">
+          <div class="ft-dot" style="left:20%"></div>
+          <div class="ft-dot" style="left:70%"></div>
+        </div>
+        <div class="section-rule"></div>
+        <div class="mock-label">Scale</div>
+        <div class="from-to-row">
+          <div class="from-to-segment">
+            <span class="from-to-tag">Start</span>
+            <span class="from-to-val">0.5</span>
+          </div>
+          <div class="from-to-divider">→</div>
+          <div class="from-to-segment">
+            <span class="from-to-tag">End</span>
+            <span class="from-to-val">2.0</span>
+          </div>
+        </div>
+        <div class="ft-slider">
+          <div class="ft-dot" style="left:12%"></div>
+          <div class="ft-dot" style="left:60%"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Option C ── -->
+  <div>
+    <div class="col-label">C · Bookend inputs + track</div>
+    <div class="col">
+
+      <div class="sidebar-mock">
+        <span class="badge off">Uniform</span>
+        <div class="mock-label">Spacing</div>
+        <div class="pill-row">
+          <div class="pill-input">40</div>
+          <div class="pill-track-wrap">
+            <div class="pill-track">
+              <div class="pill-single" style="left:30%"></div>
+            </div>
+          </div>
+          <div class="pill-input muted">—</div>
+        </div>
+        <div class="section-rule"></div>
+        <div class="mock-label">Scale</div>
+        <div class="pill-row">
+          <div class="pill-input">1.0</div>
+          <div class="pill-track-wrap">
+            <div class="pill-track">
+              <div class="pill-single" style="left:30%"></div>
+            </div>
+          </div>
+          <div class="pill-input muted">—</div>
+        </div>
+      </div>
+
+      <div class="sidebar-mock">
+        <span class="badge on">Range active</span>
+        <div class="mock-label">Spacing</div>
+        <div class="pill-row">
+          <div class="pill-input">40</div>
+          <div class="pill-track-wrap">
+            <div class="pill-track">
+              <div class="pill-fill" style="left:16%;width:38%"></div>
+            </div>
+          </div>
+          <div class="pill-input">100</div>
+        </div>
+        <div class="section-rule"></div>
+        <div class="mock-label">Scale</div>
+        <div class="pill-row">
+          <div class="pill-input">0.5</div>
+          <div class="pill-track-wrap">
+            <div class="pill-track">
+              <div class="pill-fill" style="left:10%;width:44%"></div>
+            </div>
+          </div>
+          <div class="pill-input">2.0</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

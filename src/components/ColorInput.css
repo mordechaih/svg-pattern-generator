@@ -1,0 +1,212 @@
+.color-input {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+}
+
+.color-input-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+/* ── cpill container — no overflow:hidden so picker can escape ── */
+.cpill {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  display: flex;
+  align-items: stretch;
+  transition: border-color var(--transition-fast);
+}
+
+.cpill:hover {
+  border-color: var(--text-muted);
+}
+
+/* inner flex row — this one gets overflow:hidden for the slide animation */
+.cpill-inner {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 4px 0 0 4px;
+}
+
+.cpill-half {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  height: 38px;
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  transition: background var(--transition-fast);
+}
+
+.cpill-half:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.cpill-half-end {
+  border-left: 1px solid var(--border);
+}
+
+/* swatch */
+.cpill-swatch {
+  flex-shrink: 0;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 22px;
+  height: 16px;
+  transition: width 280ms cubic-bezier(0.4, 0, 0.2, 1),
+              height 280ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 280ms;
+}
+
+.cpill-swatch-sm,
+.cpill-range .cpill-swatch {
+  width: 13px;
+  height: 13px;
+  border-radius: 2px;
+}
+
+.cpill-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  text-align: left;
+}
+
+.cpill-tag {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.cpill-hex {
+  font-size: 11px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* end half slide-in */
+.cpill-end-wrap {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  max-width: 0;
+  opacity: 0;
+  transition: max-width 350ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 250ms ease;
+}
+
+.cpill.cpill-range .cpill-end-wrap {
+  max-width: 180px;
+  opacity: 1;
+}
+
+.cpill-arrow {
+  color: var(--accent);
+  font-size: 11px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 200ms 80ms;
+}
+
+.cpill.cpill-range .cpill-arrow {
+  opacity: 1;
+}
+
+/* toggle button */
+.cpill-toggle {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border: none;
+  border-left: 1px solid var(--border);
+  background: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color var(--transition-fast), background var(--transition-fast);
+  font-family: var(--font-mono);
+  border-radius: 0 4px 4px 0;
+}
+
+.cpill-toggle:hover {
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.cpill.cpill-range .cpill-toggle {
+  color: var(--accent);
+}
+
+/* ── floating picker popup ── */
+.cpill-picker {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 200;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.cpill-picker .react-colorful {
+  width: 200px;
+}
+
+.cpill-picker .react-colorful__saturation {
+  border-radius: 4px 4px 0 0;
+  height: 140px;
+}
+
+.cpill-picker .react-colorful__hue {
+  height: 10px;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.cpill-picker .react-colorful__saturation-pointer,
+.cpill-picker .react-colorful__hue-pointer {
+  width: 14px;
+  height: 14px;
+}
+
+.cpill-picker-hex {
+  width: 100%;
+  margin-top: 8px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 5px 8px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.cpill-picker-hex:focus {
+  border-color: var(--accent-dim);
+}

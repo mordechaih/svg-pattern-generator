@@ -1,0 +1,91 @@
+.slider {
+  position: relative;
+  height: 38px;
+  border-radius: 5px;
+  background: #1C1C25;
+  cursor: ew-resize;
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.slider.dragging {
+  cursor: ew-resize;
+}
+
+/* Fill bar */
+.slider-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: #2A2A38;
+  border-radius: 5px 0 0 5px;
+  pointer-events: none;
+  will-change: width;
+}
+
+/* Subtle tick marks at 10% intervals */
+.slider::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent calc(10% - 0.5px),
+    rgba(255, 255, 255, 0.04) calc(10% - 0.5px),
+    rgba(255, 255, 255, 0.04) 10%
+  );
+  pointer-events: none;
+}
+
+/* Label + value row */
+.slider-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  pointer-events: none;
+}
+
+.slider-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-secondary, #8A8A96);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+.slider-value-input {
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-primary, #D4D4D8);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  outline: none;
+  padding: 0 0 1px 0;
+  cursor: default;
+  pointer-events: auto;
+}
+
+.slider-value-input:hover {
+  cursor: text;
+  border-bottom-color: var(--border, #2A2A32);
+}
+
+.slider-value-input.editing {
+  color: var(--accent, #D4A853);
+  border-bottom-color: var(--accent-dim, #B8923F);
+  cursor: text;
+}

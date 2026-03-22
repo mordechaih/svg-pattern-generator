@@ -1,0 +1,234 @@
+<style>
+  body { font-family: 'JetBrains Mono', 'Fira Mono', monospace; }
+
+  .demo-wrap {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .sidebar-mock {
+    background: #1a1a1f;
+    border: 1px solid #2a2a32;
+    border-radius: 10px;
+    padding: 16px;
+    width: 240px;
+    font-family: inherit;
+    flex-shrink: 0;
+  }
+
+  .mock-section { margin-bottom: 14px; }
+
+  .mock-label {
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #56565f;
+    margin-bottom: 7px;
+  }
+
+  /* ── The pill ── */
+  .pill {
+    background: #222228;
+    border: 1px solid #2a2a32;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    align-items: stretch;
+    transition: border-color 200ms ease;
+  }
+  .pill:hover { border-color: #3a3a45; }
+
+  .pill-start, .pill-end {
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+  .pill-end { border-left: 1px solid #2a2a32; }
+
+  .pill-tag {
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #45454e;
+    transition: color 200ms;
+  }
+  .pill-val {
+    font-size: 13px;
+    color: #ccc;
+    white-space: nowrap;
+  }
+
+  /* arrow centered between the two segments */
+  .pill-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2px;
+    color: #D4A853;
+    font-size: 13px;
+    flex-shrink: 0;
+    /* clipped during collapse via width animation */
+    overflow: hidden;
+    transition: width 350ms cubic-bezier(0.4,0,0.2,1), opacity 200ms ease;
+  }
+
+  /* the end segment, collapses when not in range mode */
+  .pill-end-wrap {
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+    transition: max-width 350ms cubic-bezier(0.4,0,0.2,1), opacity 250ms ease;
+  }
+
+  /* expand toggle button */
+  .pill-toggle {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    border-left: 1px solid #2a2a32;
+    color: #45454e;
+    font-size: 15px;
+    cursor: pointer;
+    background: none;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    font-family: inherit;
+    transition: color 200ms, background 200ms;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .pill-toggle:hover { color: #D4A853; background: rgba(212,168,83,0.05); }
+  .pill-toggle.active { color: #D4A853; }
+
+  /* states */
+  .pill[data-range="false"] .pill-end-wrap {
+    max-width: 0;
+    opacity: 0;
+  }
+  .pill[data-range="false"] .pill-arrow {
+    width: 0;
+    opacity: 0;
+  }
+  .pill[data-range="true"] .pill-end-wrap {
+    max-width: 120px;
+    opacity: 1;
+  }
+  .pill[data-range="true"] .pill-arrow {
+    width: 24px;
+    opacity: 1;
+  }
+  .pill[data-range="true"] .pill-toggle {
+    color: #D4A853;
+  }
+
+  .section-rule { height: 1px; background: #2a2a32; margin: 12px 0; }
+
+  .note {
+    font-size: 10px;
+    color: #56565f;
+    line-height: 1.6;
+    max-width: 240px;
+  }
+  .note strong { color: #888; }
+
+  .note-list { padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .note-list li::before { content: '→ '; color: #D4A853; }
+</style>
+
+<h2>Option B — interactive mockup</h2>
+<p class="subtitle">Click the ↔ button on each control to toggle range mode</p>
+
+<div class="demo-wrap">
+
+  <div class="sidebar-mock">
+
+    <div class="mock-section">
+      <div class="mock-label">Spacing</div>
+      <div class="pill" data-range="false" id="pill-spacing">
+        <div class="pill-start">
+          <span class="pill-tag">Start</span>
+          <span class="pill-val">40</span>
+        </div>
+        <div class="pill-arrow">→</div>
+        <div class="pill-end-wrap">
+          <div class="pill-end">
+            <span class="pill-tag">End</span>
+            <span class="pill-val">100</span>
+          </div>
+        </div>
+        <button class="pill-toggle" onclick="toggle('pill-spacing')">↔</button>
+      </div>
+    </div>
+
+    <div class="mock-section">
+      <div class="mock-label">Scale</div>
+      <div class="pill" data-range="false" id="pill-scale">
+        <div class="pill-start">
+          <span class="pill-tag">Start</span>
+          <span class="pill-val">1.0</span>
+        </div>
+        <div class="pill-arrow">→</div>
+        <div class="pill-end-wrap">
+          <div class="pill-end">
+            <span class="pill-tag">End</span>
+            <span class="pill-val">3.0</span>
+          </div>
+        </div>
+        <button class="pill-toggle" onclick="toggle('pill-scale')">↔</button>
+      </div>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <div class="mock-section">
+      <div class="mock-label">Fill Color</div>
+      <div class="pill" data-range="false" id="pill-color">
+        <div class="pill-start" style="flex-direction:row;align-items:center;gap:8px;padding:8px 10px;">
+          <div style="width:22px;height:16px;background:#D4A853;border-radius:2px;border:1px solid #3a3a42;flex-shrink:0"></div>
+          <div style="display:flex;flex-direction:column;gap:1px">
+            <span class="pill-tag">Start</span>
+            <span class="pill-val" style="font-size:11px">#D4A853</span>
+          </div>
+        </div>
+        <div class="pill-arrow">→</div>
+        <div class="pill-end-wrap">
+          <div class="pill-end" style="flex-direction:row;align-items:center;gap:8px;padding:8px 10px;">
+            <div style="width:22px;height:16px;background:#ff4422;border-radius:2px;border:1px solid #3a3a42;flex-shrink:0"></div>
+            <div style="display:flex;flex-direction:column;gap:1px">
+              <span class="pill-tag">End</span>
+              <span class="pill-val" style="font-size:11px">#FF4422</span>
+            </div>
+          </div>
+        </div>
+        <button class="pill-toggle" onclick="toggle('pill-color')">↔</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div>
+    <ul class="note-list note">
+      <li><strong>↔ button</strong> toggles range. Slides in/out smoothly.</li>
+      <li><strong>Start label</strong> stays "Start" in both states — no mode confusion.</li>
+      <li><strong>Arrow</strong> is centered between the two value columns and fades with the end segment.</li>
+      <li><strong>No separate slider</strong> below — values are click-to-edit inline (or scrub to drag). Removes the ambiguity.</li>
+      <li>Works the same for colors — swatch replaces the number.</li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+function toggle(id) {
+  const pill = document.getElementById(id);
+  const isRange = pill.dataset.range === 'true';
+  pill.dataset.range = isRange ? 'false' : 'true';
+}
+</script>
