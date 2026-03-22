@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { clampToStep } from '../utils'
 import './RangePill.css'
 
@@ -63,10 +63,6 @@ function ScrubValue({ value, onChange, min, max, step }) {
 
 function RangePill({ startValue, onStartChange, endValue, onEndChange, min, max, step }) {
   const [rangeEnabled, setRangeEnabled] = useState(() => startValue !== endValue)
-
-  useEffect(() => {
-    if (startValue === endValue && rangeEnabled) setRangeEnabled(false)
-  }, [startValue, endValue, rangeEnabled])
 
   const toggleRange = () => {
     if (rangeEnabled) onEndChange(startValue)
