@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react'
 import './Sidebar.css'
 import Slider from './Slider'
 import RangePill from './RangePill'
@@ -12,6 +13,16 @@ import { DEFAULT_PARAMS } from '../defaults'
 const BLEND_MODES = ['normal','multiply','screen','overlay','darken','lighten','color-dodge','color-burn','hard-light','soft-light','difference','exclusion']
 
 function Sidebar({ params, setParam, loadAllParams }) {
+  const [copied, setCopied] = useState(false)
+  const copyTimeoutRef = useRef(null)
+
+  const handleCopy = () => {
+    copySvgToClipboard()
+    clearTimeout(copyTimeoutRef.current)
+    setCopied(true)
+    copyTimeoutRef.current = setTimeout(() => setCopied(false), 1000)
+  }
+
   const isModified = (...keys) => keys.some(k => params[k] !== DEFAULT_PARAMS[k])
   const resetKeys = (...keys) => keys.forEach(k => setParam(k, DEFAULT_PARAMS[k]))
 
@@ -287,12 +298,20 @@ function Sidebar({ params, setParam, loadAllParams }) {
             </svg>
             Download
           </button>
-          <button className="export-btn" onClick={() => copySvgToClipboard()}>
-            <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="6" y="6" width="8" height="8" rx="1" />
-              <path d="M4 10H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1" />
-            </svg>
-            Copy
+          <button className={`export-btn export-btn-copy${copied ? ' export-btn-copied' : ''}`} onClick={handleCopy}>
+            <span className="export-btn-default">
+              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="6" y="6" width="8" height="8" rx="1" />
+                <path d="M4 10H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1" />
+              </svg>
+              Copy
+            </span>
+            <span className="export-btn-confirm">
+              <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 8l3.5 3.5L13 5" />
+              </svg>
+              Copied
+            </span>
           </button>
         </div>
         <PresetManager params={params} loadAllParams={loadAllParams} />

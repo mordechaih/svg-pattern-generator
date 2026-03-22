@@ -235,6 +235,34 @@
   background: var(--accent-glow-strong);
 }
 
+.export-btn-copy {
+  overflow: hidden;
+  position: relative;
+}
+
+.export-btn-default,
+.export-btn-confirm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.export-btn-confirm {
+  position: absolute;
+  inset: 0;
+  transform: translateY(110%);
+}
+
+.export-btn-copied .export-btn-default {
+  transform: translateY(-110%);
+}
+
+.export-btn-copied .export-btn-confirm {
+  transform: translateY(0);
+}
+
 /* Modified section indicator dot */
 .section-modified {
   width: 5px;
